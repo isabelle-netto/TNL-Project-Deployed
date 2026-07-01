@@ -239,8 +239,8 @@ with col2:
 with col3:
     st.markdown("""
     <div class="metric-card">
-        <div class="metric-number">AI</div>
-        <div class="metric-label">Powered Sentiment Prediction</div>
+        <div class="metric-number">Real-Time</div>
+        <div class="metric-label">Sentiment Analysis</div>
     </div>
     """, unsafe_allow_html=True)
 
