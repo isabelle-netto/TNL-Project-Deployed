@@ -60,7 +60,7 @@ st.markdown("""
     }
 
     .metric-number {
-        font-size: 32px;
+        font-size: 30px;
         font-weight: 800;
         color: #1e3a8a;
     }
@@ -100,11 +100,6 @@ st.markdown("""
         font-weight: 700;
     }
 
-    .small-note {
-        font-size: 14px;
-        color: #64748b;
-    }
-
     .footer {
         text-align: center;
         color: #64748b;
@@ -120,24 +115,20 @@ st.markdown("""
 
 BASE_DIR = Path(__file__).parent
 
-MODEL_OPTIONS = {
-    "SVM": BASE_DIR / "Normal Models" / "models" / "svm.pkl",
-    "Logistic Regression": BASE_DIR / "Normal Models" / "models" / "logistic_regression.pkl",
-    "Naive Bayes": BASE_DIR / "Normal Models" / "models" / "naive_bayes.pkl",
-    "Random Forest": BASE_DIR / "Normal Models" / "models" / "random_forest.pkl"
-}
-
-VECTORIZER_PATH = BASE_DIR / "Normal Models" / "TF-IDF file" / "tfidf_vectorizer.pkl"
+MODEL_PATH = BASE_DIR / "Normal Models" / "models" / "best_model.pkl"
+VECTORIZER_PATH = BASE_DIR / "Normal Models" / "TF-IDF file" / "best_tfidf_vectorizer.pkl"
 
 # -------------------------------
-# Load model and vectorizer
+# Load trained prediction system
 # -------------------------------
 
 @st.cache_resource
-def load_model(model_path):
-    model = joblib.load(model_path)
+def load_prediction_system():
+    model = joblib.load(MODEL_PATH)
     vectorizer = joblib.load(VECTORIZER_PATH)
     return model, vectorizer
+
+model, vectorizer = load_prediction_system()
 
 # -------------------------------
 # Text cleaning
@@ -177,12 +168,30 @@ def detect_aspect(text):
     text = text.lower()
 
     aspects = {
-        "Environment / Sustainability": ["environment", "water", "electricity", "energy", "pollution", "carbon", "sustainability", "climate"],
-        "Jobs / Employment": ["job", "jobs", "career", "employment", "retrenched", "replace", "worker", "salary"],
-        "AI Development": ["ai", "artificial intelligence", "automation", "robot", "technology", "innovation"],
-        "Data Centre": ["data centre", "data center", "cloud", "server", "computing", "digital hub"],
-        "Economy / Investment": ["investment", "economy", "growth", "business", "industry", "company", "market"],
-        "Public Concern": ["worried", "concern", "danger", "risk", "bad", "problem", "issue"]
+        "Environment / Sustainability": [
+            "environment", "water", "electricity", "energy", "pollution",
+            "carbon", "sustainability", "climate"
+        ],
+        "Jobs / Employment": [
+            "job", "jobs", "career", "employment", "retrenched",
+            "replace", "worker", "salary"
+        ],
+        "AI Development": [
+            "ai", "artificial intelligence", "automation", "robot",
+            "technology", "innovation"
+        ],
+        "Data Centre": [
+            "data centre", "data center", "cloud", "server",
+            "computing", "digital hub"
+        ],
+        "Economy / Investment": [
+            "investment", "economy", "growth", "business",
+            "industry", "company", "market"
+        ],
+        "Public Concern": [
+            "worried", "concern", "danger", "risk", "bad",
+            "problem", "issue"
+        ]
     }
 
     for aspect, keywords in aspects.items():
@@ -193,23 +202,6 @@ def detect_aspect(text):
     return "General Technology Opinion"
 
 # -------------------------------
-# Sidebar
-# -------------------------------
-
-st.sidebar.title("⚙️ System Settings")
-selected_model_name = st.sidebar.selectbox(
-    "Choose model for prediction:",
-    list(MODEL_OPTIONS.keys())
-)
-
-st.sidebar.markdown("---")
-st.sidebar.info(
-    "This system uses TF-IDF feature representation with traditional machine learning models."
-)
-
-model, vectorizer = load_model(MODEL_OPTIONS[selected_model_name])
-
-# -------------------------------
 # Hero section
 # -------------------------------
 
@@ -217,8 +209,7 @@ st.markdown("""
 <div class="hero">
     <h1>Malaysia Tech Sentiment Analyzer</h1>
     <p>
-        An NLP-based sentiment analysis system that classifies public opinions 
-        towards AI technology and data centres in Malaysia.
+        Analyse public opinions towards AI technology, data centres, and Malaysia’s growing digital landscape.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -227,7 +218,7 @@ st.markdown("""
 # Metric cards
 # -------------------------------
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
@@ -248,16 +239,8 @@ with col2:
 with col3:
     st.markdown("""
     <div class="metric-card">
-        <div class="metric-number">4</div>
-        <div class="metric-label">Traditional ML Models</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col4:
-    st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-number">{selected_model_name}</div>
-        <div class="metric-label">Current Model</div>
+        <div class="metric-number">AI</div>
+        <div class="metric-label">Powered Sentiment Prediction</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -272,8 +255,11 @@ left_col, right_col = st.columns([2, 1])
 with left_col:
     st.markdown("""
     <div class="info-card">
-        <h3>Comment Sentiment Prediction</h3>
-        <p>Enter a public comment related to AI, data centres, jobs, investment, or technology development in Malaysia.</p>
+        <h3>Analyse a Comment</h3>
+        <p>
+            Enter a public comment related to AI, data centres, jobs, investment, 
+            or technology development in Malaysia.
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -301,20 +287,12 @@ with left_col:
 with right_col:
     st.markdown("""
     <div class="info-card">
-        <h3>What the system detects</h3>
-        <p>Sentiment category:</p>
+        <h3>What This System Shows</h3>
+        <p>The system identifies:</p>
         <ul>
-            <li>Positive</li>
-            <li>Neutral</li>
-            <li>Negative</li>
-        </ul>
-        <p>Possible topic aspect:</p>
-        <ul>
-            <li>AI Development</li>
-            <li>Data Centre</li>
-            <li>Jobs</li>
-            <li>Environment</li>
-            <li>Investment</li>
+            <li>Whether the comment is positive, neutral, or negative</li>
+            <li>The main topic or concern in the comment</li>
+            <li>A cleaner version of the text for processing</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -356,27 +334,21 @@ if analyse_button:
             </div>
             """, unsafe_allow_html=True)
 
-        result_col1, result_col2, result_col3 = st.columns(3)
+        result_col1, result_col2 = st.columns(2)
 
         with result_col1:
-            st.metric("Selected Model", selected_model_name)
-
-        with result_col2:
             st.metric("Detected Aspect", aspect)
 
-        with result_col3:
-            if hasattr(model, "predict_proba"):
-                probabilities = model.predict_proba(vectorized_text)[0]
-                confidence = max(probabilities) * 100
-                st.metric("Confidence Score", f"{confidence:.2f}%")
-            else:
-                st.metric("Confidence Score", "Not available")
+        with result_col2:
+            st.metric("Analysis Status", "Completed")
 
         with st.expander("View text processing details"):
             st.write("**Original Text:**", user_input)
-            st.write("**Pre-processed Text Used by Model:**", cleaned_text)
-            st.caption("The system converts text to lowercase and removes unnecessary symbols, links, usernames, and extra spaces before prediction."
-    )
+            st.write("**Pre-processed Text Used by System:**", cleaned_text)
+            st.caption(
+                "The system converts text to lowercase and removes unnecessary symbols, "
+                "links, usernames, hashtags, and extra spaces before prediction."
+            )
 
 # -------------------------------
 # About section
@@ -393,8 +365,9 @@ st.markdown("""
         Natural Language Processing techniques.
     </p>
     <p>
-        The system uses text cleaning, TF-IDF feature representation, and traditional machine learning 
-        models such as SVM, Logistic Regression, Naive Bayes, and Random Forest to classify sentiment.
+        The system classifies comments into three sentiment categories: positive, neutral, 
+        and negative. It also identifies the main topic area of the comment, such as environment, 
+        jobs, investment, AI development, or data centres.
     </p>
 </div>
 """, unsafe_allow_html=True)
