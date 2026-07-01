@@ -1,0 +1,8 @@
+Best Model Selection Summary
+============================
+
+Selected Best Model: SVM
+Selection Metric: Highest Mean F1-score
+Mean F1-score: 0.674351
+
+The final model was selected based on the highest mean F1-score across 10 experimental runs. F1-score was used because it provides a balanced evaluation between precision and recall.

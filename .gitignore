@@ -2,4 +2,11 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
 Transformers/
+Normal Models/results/
+Normal Models/confusion_matrices/
+Normal Models/Feature Representations/
+Normal Models/checkpoint*/
+*.safetensors
+*.pt
