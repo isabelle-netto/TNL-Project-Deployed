@@ -267,11 +267,11 @@ with left_col:
         "Choose a sample comment or type your own below:",
         [
             "",
-            "AI data centres in Malaysia will create more job opportunities.",
-            "Data centres are bad for the environment.",
-            "Malaysia launched a new AI office.",
             "This technology development is good for the country's economy.",
-            "AI may replace many workers in Malaysia."
+            "Data centres are bad for the environment.",
+            "The data centre is located in Johor.",
+            "AI may replace many workers in Malaysia.",
+            "AI technology is used in data centres."
         ]
     )
 
