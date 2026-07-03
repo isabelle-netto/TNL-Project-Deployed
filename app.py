@@ -115,8 +115,8 @@ st.markdown("""
 
 BASE_DIR = Path(__file__).parent
 
-MODEL_PATH = BASE_DIR / "Normal Models" / "models" / "best_model.pkl"
-VECTORIZER_PATH = BASE_DIR / "Normal Models" / "TF-IDF file" / "best_tfidf_vectorizer.pkl"
+MODEL_PATH = BASE_DIR / "Normal Models" / "models" / "svm.pkl"
+VECTORIZER_PATH = BASE_DIR / "Normal Models" / "TF-IDF file" / "tfidf_vectorizer.pkl"
 
 # -------------------------------
 # Load trained prediction system
